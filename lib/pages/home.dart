@@ -35,14 +35,12 @@ class _DialogPageState extends State<DialogPage> {
       },
     );
 
-    // Create AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Simple Alert"),
       content: Text("This is an alert message."),
       actions: [okButton, cancelButton],
     );
 
-    // show the dialog
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -56,6 +54,7 @@ class _DialogPageState extends State<DialogPage> {
 
     Widget okButton = SimpleDialogOption(
       onPressed: () {
+        print('OK tapped');
         Navigator.pop(context, 'Some result');
       },
       child: const Text('OK'),
@@ -63,6 +62,7 @@ class _DialogPageState extends State<DialogPage> {
 
     Widget cancelButton = SimpleDialogOption(
       onPressed: () {
+        print('Cancel tapped');
         Navigator.pop(context, 'Some other result');
       },
       child: const Text('Cancel'),
@@ -74,10 +74,11 @@ class _DialogPageState extends State<DialogPage> {
     );
 
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return simpDialog;
-        });
+      context: context,
+      builder: (BuildContext context) {
+        return simpDialog;
+      },
+    );
   }
 
   @override
@@ -132,7 +133,9 @@ class _DialogPageState extends State<DialogPage> {
                 borderRadius: BorderRadius.circular(5),
               ),
               splashColor: Colors.blueAccent,
-              onPressed: _showSimpleDialog,
+              onPressed: () {
+                _showSimpleDialog(context);
+              },
               child: Text(
                 "Simple Dialog",
                 style: TextStyle(fontSize: 20.0),
