@@ -23,6 +23,7 @@ class _DialogPageState extends State<DialogPage> {
     // https://medium.com/@excogitatr/custom-dialog-in-flutter-d00e0441f1d5
     showDialog(
       context: context,
+      barrierDismissible: false, // user must tap a button to close the dialog
       builder: (BuildContext context) => CustomDialog(
         title: "Dialog (Immediate)",
         description:
@@ -36,6 +37,7 @@ class _DialogPageState extends State<DialogPage> {
     // https://medium.com/@excogitatr/custom-dialog-in-flutter-d00e0441f1d5
     return showDialog<void>(
       context: context,
+      barrierDismissible: false, // user must tap a button to close the dialog
       builder: (BuildContext context) => CustomDialog(
         title: "Dialog (Wait)",
         description:
@@ -112,6 +114,7 @@ class _DialogPageState extends State<DialogPage> {
   Future<void> _alertWaitFlat(BuildContext context) {
     return showDialog<void>(
       context: context,
+      barrierDismissible: false, // user must tap a button to close the dialog
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Alert (Wait)'),
@@ -134,6 +137,7 @@ class _DialogPageState extends State<DialogPage> {
   Future<void> _alertWaitRaised(BuildContext context) {
     return showDialog<void>(
       context: context,
+      barrierDismissible: false, // user must tap a button to close the dialog
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Alert (Wait)'),
@@ -177,6 +181,7 @@ class _DialogPageState extends State<DialogPage> {
 
     showDialog(
       context: context,
+      barrierDismissible: false, // user must tap a button to close the dialog
       builder: (BuildContext context) {
         return simpDialog;
       },
@@ -207,6 +212,7 @@ class _DialogPageState extends State<DialogPage> {
 
     return showDialog<void>(
       context: context,
+      barrierDismissible: false, // user must tap a button to close the dialog
       builder: (BuildContext context) {
         return simpDialog;
       },
