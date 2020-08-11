@@ -19,9 +19,33 @@ class _DialogPageState extends State<DialogPage> {
     super.initState();
   }
 
-  void _showAlertDialogRaised(BuildContext context) {
-    print('DialogPage: _showAlertDialog()');
+  void _showDialogImmediate(BuildContext context) {
+    // https://medium.com/@excogitatr/custom-dialog-in-flutter-d00e0441f1d5
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => CustomDialog(
+        title: "Dialog (Immediate)",
+        description:
+            "Ribeye pork loin andouille biltong. Cow pig pancetta pork belly drumstick chuck porchetta pork loin bacon. Buffalo jowl drumstick porchetta fatback andouille.",
+        buttonText: "OK",
+      ),
+    );
+  }
 
+  Future<void> _showDialogWait(BuildContext context) async {
+    // https://medium.com/@excogitatr/custom-dialog-in-flutter-d00e0441f1d5
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) => CustomDialog(
+        title: "Dialog (Wait)",
+        description:
+            "Ribeye pork loin andouille biltong. Cow pig pancetta pork belly drumstick chuck porchetta pork loin bacon. Buffalo jowl drumstick porchetta fatback andouille. ",
+        buttonText: "OK",
+      ),
+    );
+  }
+
+  void _showAlertDialogRaised(BuildContext context) {
     Widget okButton = RaisedButton(
       child: Text("OK"),
       onPressed: () {
@@ -54,8 +78,6 @@ class _DialogPageState extends State<DialogPage> {
   }
 
   void _showAlertDialogFlat(BuildContext context) {
-    print('DialogPage: _showAlertDialog()');
-
     Widget okButton = FlatButton(
       child: Text("OK"),
       onPressed: () {
@@ -87,9 +109,51 @@ class _DialogPageState extends State<DialogPage> {
     );
   }
 
-  void _showSimpleDialog(BuildContext context) {
-    print('DialogPage: _showSimpleDialog()');
+  Future<void> _alertWaitFlat(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Alert (Wait)'),
+          content: const Text(
+              'Ribeye pork loin andouille biltong. Cow pig pancetta pork belly drumstick chuck porchetta pork loin bacon. Buffalo jowl drumstick porchetta fatback andouille.'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                print('OK tapped');
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
+  Future<void> _alertWaitRaised(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Alert (Wait)'),
+          content: const Text(
+              'Ribeye pork loin andouille biltong. Cow pig pancetta pork belly drumstick chuck porchetta pork loin bacon. Buffalo jowl drumstick porchetta fatback andouille.'),
+          actions: <Widget>[
+            RaisedButton(
+              child: Text('Ok'),
+              onPressed: () {
+                print('OK tapped');
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showSimpleDialog(BuildContext context) {
     Widget okButton = SimpleDialogOption(
       onPressed: () {
         print('OK tapped');
@@ -119,31 +183,35 @@ class _DialogPageState extends State<DialogPage> {
     );
   }
 
-  void _showDialogImmediate(BuildContext context) {
-    // https://medium.com/@excogitatr/custom-dialog-in-flutter-d00e0441f1d5
-    showDialog(
+  Future<void> _showSimpleDialogWait(BuildContext context) {
+    Widget okButton = SimpleDialogOption(
+      onPressed: () {
+        print('OK tapped');
+        Navigator.pop(context, 'Some result');
+      },
+      child: const Text('OK'),
+    );
+
+    Widget cancelButton = SimpleDialogOption(
+      onPressed: () {
+        print('Cancel tapped');
+        Navigator.pop(context, 'Some other result');
+      },
+      child: const Text('Cancel'),
+    );
+
+    SimpleDialog simpDialog = SimpleDialog(
+      title: const Text('This is a simple dialog'),
+      children: <Widget>[okButton, cancelButton],
+    );
+
+    return showDialog<void>(
       context: context,
-      builder: (BuildContext context) => CustomDialog(
-        title: "Dialog (Immediate)",
-        description:
-            "Ribeye pork loin andouille biltong. Cow pig pancetta pork belly drumstick chuck porchetta pork loin bacon. Buffalo jowl drumstick porchetta fatback andouille. ",
-        buttonText: "OK",
-      ),
+      builder: (BuildContext context) {
+        return simpDialog;
+      },
     );
   }
-
-  // Future<Null> _showDialogWait(BuildContext context) async {
-  //   // https://medium.com/@excogitatr/custom-dialog-in-flutter-d00e0441f1d5
-  //   return await showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) => CustomDialog(
-  //       title: "Dialog (Wait)",
-  //       description:
-  //           "Ribeye pork loin andouille biltong. Cow pig pancetta pork belly drumstick chuck porchetta pork loin bacon. Buffalo jowl drumstick porchetta fatback andouille. ",
-  //       buttonText: "OK",
-  //     ),
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -156,10 +224,10 @@ class _DialogPageState extends State<DialogPage> {
           padding: const EdgeInsets.all(16.0),
           children: <Widget>[
             SizedBox(height: 10),
-            Text("Tap one of the buttons below to display a dialog."),
+            Text(
+                "Tap one of the buttons below to display the corresponding dialog."),
 
             SizedBox(height: 20),
-
             //=================================
             // Dialog (immediate)
             //=================================
@@ -174,9 +242,9 @@ class _DialogPageState extends State<DialogPage> {
               ),
               splashColor: Colors.blueAccent,
               onPressed: () {
-                print('start');
+                print('Start');
                 _showDialogImmediate(context);
-                print('end');
+                print('Done');
               },
               child: Text(
                 "Dialog (Immediate)",
@@ -185,33 +253,30 @@ class _DialogPageState extends State<DialogPage> {
             ),
 
             SizedBox(height: 20),
-
-            //=================================
+            // =================================
             // Dialog (wait)
-            //=================================
-            // RaisedButton(
-            //   color: Colors.blueGrey,
-            //   textColor: Colors.white,
-            //   disabledColor: Colors.grey,
-            //   disabledTextColor: Colors.black,
-            //   padding: EdgeInsets.all(16.0),
-            //   shape: RoundedRectangleBorder(
-            //     borderRadius: BorderRadius.circular(5),
-            //   ),
-            //   splashColor: Colors.blueAccent,
-            //   onPressed: () {
-            //     print('start');
-            //     _showDialogWait(context);
-            //     print('end');
-            //   },
-            //   child: Text(
-            //     "Dialog (Wait)",
-            //     style: TextStyle(fontSize: 20.0),
-            //   ),
-            // ),
+            // =================================
+            RaisedButton(
+              color: Colors.blueGrey,
+              textColor: Colors.white,
+              disabledColor: Colors.grey,
+              disabledTextColor: Colors.black,
+              padding: EdgeInsets.all(16.0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+              splashColor: Colors.blueAccent,
+              onPressed: () {
+                print('Start');
+                _showDialogWait(context).then((value) => {print('Done')});
+              },
+              child: Text(
+                "Dialog (Wait)",
+                style: TextStyle(fontSize: 20.0),
+              ),
+            ),
 
             SizedBox(height: 20),
-
             //=================================
             // Alert Dialog (Raised)
             //=================================
@@ -230,12 +295,13 @@ class _DialogPageState extends State<DialogPage> {
                 style: TextStyle(fontSize: 20.0),
               ),
               onPressed: () {
+                print('Start');
                 _showAlertDialogRaised(context);
+                print('Done');
               },
             ),
 
             SizedBox(height: 20),
-
             //=================================
             // Alert Dialog (Flat)
             //=================================
@@ -254,14 +320,15 @@ class _DialogPageState extends State<DialogPage> {
                 style: TextStyle(fontSize: 20.0),
               ),
               onPressed: () {
+                print('Start');
                 _showAlertDialogFlat(context);
+                print('Done');
               },
             ),
 
             SizedBox(height: 20),
-
             //=================================
-            // Simple Dialog
+            // Alert Dialog (Flat, Wait)
             //=================================
             RaisedButton(
               color: Colors.orangeAccent,
@@ -273,11 +340,85 @@ class _DialogPageState extends State<DialogPage> {
                 borderRadius: BorderRadius.circular(5),
               ),
               splashColor: Colors.blueAccent,
+              child: Text(
+                "Alert Dialog (Flat, Wait)",
+                style: TextStyle(fontSize: 20.0),
+              ),
               onPressed: () {
+                print('Start');
+                _alertWaitFlat(context).then((value) => {print('Done')});
+              },
+            ),
+
+            SizedBox(height: 20),
+            //=================================
+            // Alert Dialog (Raised, Wait)
+            //=================================
+            RaisedButton(
+              color: Colors.orangeAccent,
+              textColor: Colors.white,
+              disabledColor: Colors.grey,
+              disabledTextColor: Colors.black,
+              padding: EdgeInsets.all(16.0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+              splashColor: Colors.blueAccent,
+              child: Text(
+                "Alert Dialog (Raised, Wait)",
+                style: TextStyle(fontSize: 20.0),
+              ),
+              onPressed: () {
+                print('Start');
+                _alertWaitRaised(context).then((value) => {print('Done')});
+              },
+            ),
+
+            SizedBox(height: 20),
+            //=================================
+            // Simple Dialog
+            //=================================
+            RaisedButton(
+              color: Colors.grey,
+              textColor: Colors.white,
+              disabledColor: Colors.grey,
+              disabledTextColor: Colors.black,
+              padding: EdgeInsets.all(16.0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+              splashColor: Colors.blueAccent,
+              onPressed: () {
+                print('Start');
                 _showSimpleDialog(context);
+                print('Done');
               },
               child: Text(
                 "Simple Dialog",
+                style: TextStyle(fontSize: 20.0),
+              ),
+            ),
+
+            SizedBox(height: 20),
+            //=================================
+            // Simple Dialog (Wait)
+            //=================================
+            RaisedButton(
+              color: Colors.grey,
+              textColor: Colors.white,
+              disabledColor: Colors.grey,
+              disabledTextColor: Colors.black,
+              padding: EdgeInsets.all(16.0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+              splashColor: Colors.blueAccent,
+              onPressed: () {
+                print('Start');
+                _showSimpleDialogWait(context).then((value) => {print('Done')});
+              },
+              child: Text(
+                "Simple Dialog (Wait)",
                 style: TextStyle(fontSize: 20.0),
               ),
             ),
