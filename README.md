@@ -8,7 +8,7 @@ The screen shot below shows the app home page. It essentially lists a bunch of b
 
 Most of the examples I found on the Internet displayed non-modal dialogs: in other words, the dialog would open then the app contiues execution. For some of my apps, I needed modal dialogs that interrupt app flow until the acts in the dialog, so I added non-wait and wait versions of each dialog so I could demonstrate how to do dialogs both ways.
 
-By default, Flutter dialogs allow users to tap outside of the dialog to dismiss it. That's unexpected behavior in my eyes, so I added the following to each call to `showDialog` to force the user (you) to interact with the dialog by tapping one of the buttons before the dialog closes.
+By default, Flutter dialogs allow users to tap outside of the dialog to dismiss it. That's unexpected behavior in my eyes, so I added the following code to each call to `showDialog` to force the user (you) to interact with the dialog by tapping one of the buttons before the dialog closes:
 
 ```dart
 barrierDismissible: false, // user must tap a button to close the dialog
